@@ -1,4 +1,7 @@
 import React from "react";
+import Dashboard from './components/dashboard/dashboard';
+import Preferences from './components/preferences/preferences';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import "./App.css";
 
 const BB2_AUTH_URL = 'https://sandbox.bluebutton.cms.gov/v1/o/authorize';
@@ -25,13 +28,31 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <h1>Application</h1>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/dashboard">
+              <Dashboard />
+            </Route>
+            <Route path="/preferences">
+              <Preferences />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </header>
+    </div>
+  );
+}
+
+/*
+<div className="App">
+      <header className="App-header">
         <p>{!data ? "Loading..." : data}</p>
         <a href={createAuthorizeLink()}>
           Authorize
         </a>
       </header>
     </div>
-  );
-}
+*/
 
 export default App;
