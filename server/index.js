@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require('path');
-const request = require('request');
+const axios = require('axios');
+const FormData = require('form-data');
 
 const BB2_BASE_URL = 'https://sandbox.bluebutton.cms.gov';
 const BB2_AUTH_URL = BB2_BASE_URL + '/v1/o/authorize';
@@ -30,30 +31,24 @@ app.localStorage = {};
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.get("/api/bluebutton/callback", async (req, res) => {
-    request(
-        // POST request to /token endpoint
-        {
-            method: 'POST',
-            uri: BB2_ACCESS_TOKEN_URL,
-            form: {
-                'client_id': APP_SPECIFIC_CLIENT_ID,
-                'client_secret': APP_SPECIFIC_CLIENT_SECRET,
-                'code': req.query.code,
-                'grant_type': 'authorization_code',
-                'redirect_uri': APP_SPECIFIC_REDIRECT_URI
-            }
-        },
-
-        // callback
-        (error, response, body) => {
-            const responseBodyJson = JSON.parse(body);
-            // save token to session
-            app.localStorage[responseBodyJson.patient] = responseBodyJson;
-
-            // redirect to the React app
-            res.redirect(`http://localhost:3000`);
-        }
-    );
+    try {
+        const form = new FormData();
+        form.append('client_id', APP_SPECIFIC_CLIENT_ID);
+        form.append('client_secret', APP_SPECIFIC_CLIENT_SECRET);
+        form.append('code', req.query.code);
+        form.append('grant_type', 'authorization_code');
+        form.append('redirect_uri', APP_SPECIFIC_REDIRECT_URI);
+        const response = await axios.post(BB2_ACCESS_TOKEN_URL, form, { headers: form.getHeaders() });
+    
+        console.log(response);
+        console.log(response.data);
+    
+        app.localStorage[response.data.patient] = response.data;
+    } catch (e) {
+        console.log(e);
+    }
+    
+    res.redirect(`http://localhost:3000`);
 });
 
 app.get("/api/authorize", (req, res) => {
