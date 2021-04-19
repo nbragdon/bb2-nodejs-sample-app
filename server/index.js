@@ -30,6 +30,12 @@ app.localStorage = {};
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
+app.use('/api/login', (req, res) => {
+    res.send({
+        token: 'test123'
+    });
+});
+
 app.get("/api/bluebutton/callback", async (req, res) => {
     try {
         const form = new FormData();
