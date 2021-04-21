@@ -32,14 +32,18 @@ app.use(express.static(path.resolve(__dirname, '../client/build')));
 app.use('/api/users/login', (req, res) => {
     res.send({
         token: uuidv4(),
-        user: uuidv4()
+        user: {
+            name: uuidv4()
+        }
     });
 });
 
 app.use('/api/users/verifyToken', (req, res) => {
     res.send({
         token: uuidv4(),
-        user: uuidv4()
+        user: {
+            name: uuidv4()
+        }
     });
 });
 
