@@ -1,7 +1,21 @@
 import React from 'react';
-
-export default function Dashboard() {
-  return(
-    <h2>Dashboard</h2>
+import { getUser, removeUserSession } from '../../utils/user/userSession';
+ 
+function Dashboard(props) {
+  const user = getUser();
+ 
+  // handle click event of logout button
+  const handleLogout = () => {
+    removeUserSession();
+    props.history.push('/login');
+  }
+ 
+  return (
+    <div>
+      Welcome {user.name}!<br /><br />
+      <input type="button" onClick={handleLogout} value="Logout" />
+    </div>
   );
 }
+ 
+export default Dashboard;
