@@ -12,7 +12,7 @@ function Login(props) {
   const handleLogin = () => {
     setError(null);
     setLoading(true);
-    axios.post('/api/users/signin', { username: username.value, password: password.value }).then(response => {
+    axios.post('/api/users/login', { username: username.value, password: password.value }).then(response => {
       setLoading(false);
       setUserSession(response.data.token, response.data.user);
       props.history.push('/dashboard');

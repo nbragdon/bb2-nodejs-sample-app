@@ -24,7 +24,7 @@ function App() {
       return;
     }
  
-    axios.get(`/api/verifyToken?token=${token}`).then(response => {
+    axios.get(`/api/users/verifyToken?token=${token}`).then(response => {
       setUserSession(response.data.token, response.data.user);
       setAuthLoading(false);
     }).catch(error => {

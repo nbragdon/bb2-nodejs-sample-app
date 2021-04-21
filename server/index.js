@@ -2,6 +2,7 @@ const express = require("express");
 const path = require('path');
 const axios = require('axios');
 const FormData = require('form-data');
+const { v4: uuidv4 } = require('uuid');
 
 const BB2_BASE_URL = 'https://sandbox.bluebutton.cms.gov';
 const BB2_AUTH_URL = BB2_BASE_URL + '/v1/o/authorize';
@@ -20,8 +21,6 @@ const config = {
     }
 };
    
-const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
-
 const PORT = process.env.PORT || 3001;
 
 const app = express();
@@ -30,9 +29,17 @@ app.localStorage = {};
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
-app.use('/api/login', (req, res) => {
+app.use('/api/users/login', (req, res) => {
     res.send({
-        token: 'test123'
+        token: uuidv4(),
+        user: uuidv4()
+    });
+});
+
+app.use('/api/users/verifyToken', (req, res) => {
+    res.send({
+        token: uuidv4(),
+        user: uuidv4()
     });
 });
 
