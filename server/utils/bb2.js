@@ -24,7 +24,7 @@ module.exports.getAccessToken = async function(codeChallenge) {
     form.append('client_id', APP_SPECIFIC_CLIENT_ID);
     form.append('client_secret', APP_SPECIFIC_CLIENT_SECRET);
     form.append('code', req.query.code);
-    //form.append('code_challenge', codeChallenge);
+    form.append('code_challenge', codeChallenge);
     form.append('grant_type', 'authorization_code');
     form.append('redirect_uri', APP_SPECIFIC_REDIRECT_URI);
     return await axios.post(BB2_ACCESS_TOKEN_URL, form, { headers: form.getHeaders() });
