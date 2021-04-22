@@ -9,11 +9,6 @@ import PublicRoute from './utils/routing/public';
 import PrivateRoute from './utils/routing/private';
 
 import { getToken, removeUserSession, setUserSession } from './utils/user/userSession';
-
-const BB2_AUTH_URL = 'https://sandbox.bluebutton.cms.gov/v1/o/authorize';
-const APP_SPECIFIC_CLIENT_ID = '9d6CVFOXOHMFyXQXpjK56XiN1HXMOuwW92IVX2oe';
-const APP_SPECIFIC_REDIRECT_URI = 'http://localhost:3001/api/bluebutton/callback/'; // note that http is only allowed in sandbox
-const APP_SPECIFIC_SCOPE = 'patient/Patient.read%20patient/Coverage.read%20patient/ExplanationOfBenefit.read%20profile';
  
 function App() {
   const [authLoading, setAuthLoading] = useState(true);

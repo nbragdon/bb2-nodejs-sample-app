@@ -6,15 +6,12 @@ function base64URLEncode(str) {
         .replace(/\//g, '_')
         .replace(/=/g, '');
 }
-var verifier = base64URLEncode(crypto.randomBytes(32));
-console.log("code_verifier: ", verifier)
-
-if(verifier){
-    var challenge = base64URLEncode(sha256(verifier));
-    console.log("code_challenge: ",challenge)
-}
-
 
 function sha256(buffer) {
     return crypto.createHash('sha256').update(buffer).digest();
+}
+
+module.exports.generateCodeChallenge = function() {
+    var verifier = base64URLEncode(crypto.randomBytes(32));
+    return base64URLEncode(sha256(verifier));
 }
