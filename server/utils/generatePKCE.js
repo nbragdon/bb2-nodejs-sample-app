@@ -13,5 +13,8 @@ function sha256(buffer) {
 
 module.exports.generateCodeChallenge = function() {
     var verifier = base64URLEncode(crypto.randomBytes(32));
-    return base64URLEncode(sha256(verifier));
+    return {
+        codeChallenge: base64URLEncode(sha256(verifier)),
+        verifier: verifier
+    };
 }

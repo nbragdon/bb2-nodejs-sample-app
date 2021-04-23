@@ -5,17 +5,20 @@ import { getUser, removeUserSession } from '../../utils/user/userSession';
  
 function Dashboard(props) {
   const [authorizeLink, setAuthorizeLink] = useState();
-  const user = getUser();
+  const [patientData, setPatientData] = useState();
+  //const user = getUser();
  
-  // handle click event of logout button
+  /*
   const handleLogout = () => {
     removeUserSession();
     props.history.push('/login');
   };
+  */
 
   let authorizeDisplay = (<div className="content" >
     Generating authorization url...
   </div>);
+  let patientDisplay = (<div>No patient data loaded</div>);
 
   useEffect(() => { 
     axios.get(`/api/authorize`).then(response => {
@@ -23,6 +26,11 @@ function Dashboard(props) {
     }).catch(error => {
         setAuthorizeLink('unavailable');
     });
+
+    axios.get('/api/patient').then(response => {
+        setPatientData(response.data);
+    });
+    
   }, []);
 
   if (authorizeLink === 'unavailable') {
@@ -36,13 +44,21 @@ function Dashboard(props) {
         </a>
     );
   }
+
+  if (patientData) {
+      console.log('patientData', patientData);
+    patientDisplay = (<div><pre>
+        {JSON.stringify(patientData, null, 2) }
+    </pre></div>)
+  }
  
   return (
     <div>
-      Welcome {user.name}!<br /><br />
+      Welcome BB2 Developer!<br /><br />
       Authorize Sample App to access your medicare data<br /><br />
       {authorizeDisplay}<br /><br />
-      <input type="button" onClick={handleLogout} value="Logout" />
+      {patientDisplay}<br /><br />
+      <input type="button" value="Logout" />
     </div>
   );
 }

@@ -14,17 +14,18 @@ module.exports.generateAuthorizeUrl = function(codeChallenge) {
     return BB2_AUTH_URL +
         '?client_id=' + APP_SPECIFIC_CLIENT_ID + 
         '&redirect_uri=' + APP_SPECIFIC_REDIRECT_URI + 
-        '&code_challenge=' + codeChallenge + 
+        '&code_challenge=' + codeChallenge.codeChallenge + 
         '&response_type=code' +
-        '&code_challenge_method=SHA256';
+        '&code_challenge_method=S256';
 }
 
-module.exports.getAccessToken = async function(codeChallenge) {
+module.exports.getAccessToken = async function(code, codeChallenge) {
     const form = new FormData();
     form.append('client_id', APP_SPECIFIC_CLIENT_ID);
     form.append('client_secret', APP_SPECIFIC_CLIENT_SECRET);
-    form.append('code', req.query.code);
-    form.append('code_challenge', codeChallenge);
+    form.append('code', code);
+    form.append('code_verifier', codeChallenge.verifier);
+    form.append('code_challenge', codeChallenge.codeChallenge);
     form.append('grant_type', 'authorization_code');
     form.append('redirect_uri', APP_SPECIFIC_REDIRECT_URI);
     return await axios.post(BB2_ACCESS_TOKEN_URL, form, { headers: form.getHeaders() });

@@ -13,7 +13,8 @@ const app = express();
 
 app.localStorage = {
     users: {},
-    codeChallenge: generateCodeChallenge()
+    codeChallenge: generateCodeChallenge(),
+    patient: {}
 };
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
@@ -37,17 +38,21 @@ app.use('/api/users/verifyToken', (req, res) => {
 app.get("/api/bluebutton/callback", async (req, res) => {
     try {
         console.log('req.params', req.params);
-        const response = getAccessToken(app.localStorage.codeChallenge);
+        const response = await getAccessToken(req.query.code, app.localStorage.codeChallenge);
     
         console.log(response);
         console.log(response.data);
     
-        app.localStorage[response.data.patient] = response.data;
+        app.localStorage.patient = response.data;
     } catch (e) {
         console.log(e);
     }
     
     res.redirect(`http://localhost:3000`);
+});
+
+app.get('/api/patient', (req, res) => {
+    res.send(app.localStorage.patient);
 });
 
 app.get('/api/authorize', (req, res) => {
